@@ -91,7 +91,7 @@ public class LampGUI {
                 } else {
                     pan.add(new JLabel(offLamp), 0);
                 }
-                pan.validate();
+                pan.revalidate();
             }
 
             void turnOn(final LampModel lamp, final JPanel pan) {
@@ -99,7 +99,7 @@ public class LampGUI {
                     lamp.switchOn();
                     pan.remove(0);
                     pan.add(new JLabel(onLamp), 0);
-                    pan.validate();
+                    pan.revalidate();
                 }
             }
 
@@ -108,7 +108,7 @@ public class LampGUI {
                     lamp.switchOff();
                     pan.remove(0);
                     pan.add(new JLabel(offLamp), 0);
-                    pan.validate();
+                    pan.revalidate();
                 }
             }
         }
@@ -139,7 +139,7 @@ public class LampGUI {
 
                 lampSwitch.addActionListener(a -> new SwitchLamp().switchLamp(lamp, lampLayout));
 
-                lamps.validate();
+                lamps.revalidate();
             } else {
                 JOptionPane.showMessageDialog(f, "Can't insert any more lamps!", "Too Many Lamps Error",
                         JOptionPane.ERROR_MESSAGE);
@@ -151,7 +151,7 @@ public class LampGUI {
                 lampCount--;
                 lampList.remove(lampList.size() - 1);
                 lamps.remove(lamps.getComponentCount() - 1);
-                lamps.validate();
+                lamps.revalidate();
                 lamps.repaint();
             } else {
                 JOptionPane.showMessageDialog(f, "Can't remove any more lamps!", "Too Little Lamps Error",
