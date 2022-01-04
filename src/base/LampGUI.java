@@ -149,6 +149,9 @@ public class LampGUI {
                         indexSelector.revalidate();
                         indexSelector.setSelectedIndex(
                                 indexSelector.getSelectedIndex() == lampCount ? -1 : indexSelector.getSelectedIndex());
+                        for (int i = 0; i < lamps.getComponentCount(); i++) {
+                            ((JButton) ((JPanel) lamps.getComponent(i)).getComponent(1)).setText("Switch State" + " [" + (i + 1) + "]");
+                        }
                         lamps.revalidate();
                         lamps.repaint();
                     } else {
@@ -172,7 +175,7 @@ public class LampGUI {
                 final var lamp = new LampModel();
                 lampLayout.setLayout(new GridLayout(2, 1));
 
-                final var lampSwitch = new MyButton("Switch State");
+                final var lampSwitch = new MyButton("Switch State" + " [" + lampCount + "]");
                 lampSwitch.setHorizontalAlignment(JButton.CENTER);
                 lampSwitch.setFont(new Font(FONT, Font.BOLD, FONT_SIZE));
                 lampSwitch.setBackground(new Color(255, 255, 0));
@@ -213,7 +216,7 @@ public class LampGUI {
         canvas.add(lamps);
         f.setContentPane(canvas);
         final Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        final int sw = (int) (screen.getWidth() / 1.5);
+        final int sw = (int) (screen.getWidth() / 1.4);
         final int sh = (int) (screen.getHeight() / 2);
         f.setSize(sw, sh);
         f.setLocationByPlatform(true);
