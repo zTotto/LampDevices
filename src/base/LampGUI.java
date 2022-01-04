@@ -46,6 +46,14 @@ public class LampGUI {
         newLamp.setPressedBackgroundColor(new Color(200, 200, 0));
         newLamp.setFocusPainted(false);
 
+        final var removeLastLamp = new MyButton("Remove Last Lamp");
+        removeLastLamp.setHorizontalAlignment(JButton.CENTER);
+        removeLastLamp.setFont(new Font(FONT, Font.BOLD, 32));
+        removeLastLamp.setBackground(new Color(0, 0, 255));
+        removeLastLamp.setHoverBackgroundColor(new Color(0, 0, 255));
+        removeLastLamp.setPressedBackgroundColor(new Color(0, 0, 120));
+        removeLastLamp.setFocusPainted(false);
+
         final var allOff = new MyButton("Turn Off All Lamps");
         allOff.setHorizontalAlignment(JButton.CENTER);
         allOff.setFont(new Font(FONT, Font.BOLD, 32));
@@ -63,10 +71,11 @@ public class LampGUI {
         allOn.setFocusPainted(false);
 
         canvas.setLayout(new GridLayout(1, 2));
-        buttons.setLayout(new GridLayout(3, 1));
+        buttons.setLayout(new GridLayout(4, 1));
         lamps.setLayout(new FlowLayout());
 
         buttons.add(newLamp);
+        buttons.add(removeLastLamp);
         buttons.add(allOn);
         buttons.add(allOff);
         canvas.add(buttons);
@@ -132,7 +141,20 @@ public class LampGUI {
 
                 lamps.validate();
             } else {
-                JOptionPane.showMessageDialog(f, "You can't insert any more lamps!", "Too Many Lamps Error",
+                JOptionPane.showMessageDialog(f, "Can't insert any more lamps!", "Too Many Lamps Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        removeLastLamp.addActionListener(e -> {
+            if (lampCount > 0) {
+                lampCount--;
+                lampList.remove(lampList.size() - 1);
+                lamps.remove(lamps.getComponentCount() - 1);
+                lamps.validate();
+                lamps.repaint();
+            } else {
+                JOptionPane.showMessageDialog(f, "Can't remove any more lamps!", "Too Little Lamps Error",
                         JOptionPane.ERROR_MESSAGE);
             }
         });
@@ -140,9 +162,8 @@ public class LampGUI {
         allOn.addActionListener(
                 e -> lampList.stream().forEach(pair -> new SwitchLamp().turnOn(pair.getFirst(), pair.getSecond())));
 
-        allOff.addActionListener(e -> {
-            lampList.stream().forEach(pair -> new SwitchLamp().turnOff(pair.getFirst(), pair.getSecond()));
-        });
+        allOff.addActionListener(
+                e -> lampList.stream().forEach(pair -> new SwitchLamp().turnOff(pair.getFirst(), pair.getSecond())));
 
         // Frame Operations
         canvas.add(lamps);
