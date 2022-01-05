@@ -28,7 +28,6 @@ public class LampGUI {
     private final ImageIcon onLamp = new ImageIcon(ClassLoader.getSystemResource("images/OnLamp.png")); // ON LAMP
     private static final String FONT = "SansSerif";
     private static final int MAX_LAMPS = 8;
-    private int lampCount;
     private static final int FONT_SIZE = 24;
     private static final Font FONT_AND_SIZE = new Font(FONT, Font.BOLD, 32);
 
@@ -74,7 +73,11 @@ public class LampGUI {
 
         canvas.setLayout(new GridLayout(1, 2));
         buttons.setLayout(new GridLayout(5, 1));
-        lamps.setLayout(new FlowLayout());
+        lamps.setLayout(new FlowLayout(MAX_LAMPS));
+        for (int i = 0; i < MAX_LAMPS; i++) {
+            lamps.add(new JPanel());
+            lamps.getComponent(i).setVisible(false);
+        }
 
         buttons.add(newLamp);
         buttons.add(removeLastLamp);
@@ -85,16 +88,15 @@ public class LampGUI {
 
         // Button Operations
 
-        newLamp.addActionListener(e -> lampCount = LampOperations.addLamp(index, lampCount, MAX_LAMPS, FONT, FONT_SIZE,
-                onLamp, offLamp, lamps, lampList, indexSelector, f));
+        newLamp.addActionListener(e -> LampOperations.addLamp(index, MAX_LAMPS, FONT, FONT_SIZE, onLamp, offLamp, lamps,
+                lampList, indexSelector));
 
-        removeLastLamp.addActionListener(e -> lampCount = LampOperations.removeAtIndex(index, lampList, lamps,
-                indexSelector, lamps.getComponentCount() - 1, MAX_LAMPS, lampCount, f));
+        removeLastLamp.addActionListener(e -> LampOperations.removeAtIndex(index, lampList, lamps, indexSelector,
+                LampOperations.getLastLamp(lamps)));
 
-        removeSelectedLamp.addActionListener(e -> lampCount = LampOperations.removeAtIndex(index, lampList, lamps,
-                indexSelector, indexSelector.getSelectedIndex() >= 0 ? indexSelector.getSelectedIndex()
-                        : lamps.getComponentCount() - 1,
-                MAX_LAMPS, lampCount, f));
+        removeSelectedLamp.addActionListener(e -> LampOperations.removeAtIndex(index, lampList, lamps, indexSelector,
+                indexSelector.getSelectedItem() == null ? LampOperations.getLastLamp(lamps) : ((int) indexSelector.getSelectedItem() - 1) >= 0 ? (int) indexSelector.getSelectedItem() - 1
+                        : LampOperations.getLastLamp(lamps)));
 
         allOn.addActionListener(e -> lampList.stream()
                 .forEach(pair -> LampOperations.turnOn(pair.getFirst(), pair.getSecond(), onLamp)));
