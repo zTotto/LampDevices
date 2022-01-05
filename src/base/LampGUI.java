@@ -159,7 +159,7 @@ public class LampGUI {
                                 JOptionPane.ERROR_MESSAGE);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(f, "Can't remove any more lamps!", "Too Little Lamps Error",
+                    JOptionPane.showMessageDialog(f, "Can't remove any more lamps!", "Too Few Lamps Error",
                             JOptionPane.ERROR_MESSAGE);
                 }
             }
