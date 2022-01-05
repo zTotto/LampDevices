@@ -1,6 +1,7 @@
 package base;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 
 import javax.swing.JButton;
@@ -22,6 +23,16 @@ class MyButton extends JButton {
     MyButton(final String text) {
         super(text);
         super.setContentAreaFilled(false);
+    }
+
+    @SuppressWarnings("PMD.ConstructorCallsOverridableMethod")
+    MyButton(final String text, final Font font, final int alignment, final Color color) {
+        this(text);
+        this.setFont(font);
+        this.setBackground(color);
+        this.setHoverBackgroundColor(color);
+        this.setHorizontalAlignment(alignment);
+        this.setFocusPainted(false);
     }
 
     @Override
