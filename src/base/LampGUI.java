@@ -15,7 +15,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -31,6 +30,7 @@ public class LampGUI {
     private static final int MAX_LAMPS = 8;
     private int lampCount;
     private static final int FONT_SIZE = 24;
+    private static final Font FONT_AND_SIZE = new Font(FONT, Font.BOLD, 32);
 
     /**
      * Constructor for the GUI.
@@ -45,29 +45,16 @@ public class LampGUI {
         @SuppressWarnings("PMD.UseArrayListInsteadOfVector")
         final Vector<Integer> index = new Vector<>();
 
-        final var newLamp = new MyButton("Create New Lamp");
-        newLamp.setHorizontalAlignment(JButton.CENTER);
-        newLamp.setFont(new Font(FONT, Font.BOLD, 32));
-        newLamp.setBackground(new Color(255, 255, 0));
-        newLamp.setHoverBackgroundColor(new Color(255, 255, 0));
+        final var newLamp = new MyButton("Create New Lamp", FONT_AND_SIZE, JButton.CENTER, new Color(255, 255, 0));
         newLamp.setPressedBackgroundColor(new Color(200, 200, 0));
-        newLamp.setFocusPainted(false);
 
-        final var removeLastLamp = new MyButton("Remove Last Lamp");
-        removeLastLamp.setHorizontalAlignment(JButton.CENTER);
-        removeLastLamp.setFont(new Font(FONT, Font.BOLD, 32));
-        removeLastLamp.setBackground(new Color(0, 181, 222));
-        removeLastLamp.setHoverBackgroundColor(new Color(0, 181, 222));
+        final var removeLastLamp = new MyButton("Remove Last Lamp", FONT_AND_SIZE, JButton.CENTER,
+                new Color(0, 181, 222));
         removeLastLamp.setPressedBackgroundColor(new Color(0, 140, 171));
-        removeLastLamp.setFocusPainted(false);
 
-        final var removeSelectedLamp = new MyButton("Remove At Selected Index");
-        removeSelectedLamp.setHorizontalAlignment(JButton.LEFT);
-        removeSelectedLamp.setFont(new Font(FONT, Font.BOLD, 32));
-        removeSelectedLamp.setBackground(new Color(0, 181, 222));
-        removeSelectedLamp.setHoverBackgroundColor(new Color(0, 181, 222));
+        final var removeSelectedLamp = new MyButton("Remove At Selected Index", FONT_AND_SIZE, JButton.LEFT,
+                new Color(0, 181, 222));
         removeSelectedLamp.setPressedBackgroundColor(new Color(0, 140, 171));
-        removeSelectedLamp.setFocusPainted(false);
         removeSelectedLamp.setLayout(new GridLayout(1, 2));
         removeSelectedLamp.add(new JPanel());
         removeSelectedLamp.getComponent(0).setVisible(false);
@@ -79,21 +66,11 @@ public class LampGUI {
         indexSelector.setBackground(new Color(0, 181, 222));
         removeSelectedLamp.add(indexSelector);
 
-        final var allOff = new MyButton("Turn Off All Lamps");
-        allOff.setHorizontalAlignment(JButton.CENTER);
-        allOff.setFont(new Font(FONT, Font.BOLD, 32));
-        allOff.setBackground(new Color(255, 0, 0));
-        allOff.setHoverBackgroundColor(new Color(255, 0, 0));
+        final var allOff = new MyButton("Turn Off All Lamps", FONT_AND_SIZE, JButton.CENTER, new Color(255, 0, 0));
         allOff.setPressedBackgroundColor(new Color(120, 0, 0));
-        allOff.setFocusPainted(false);
 
-        final var allOn = new MyButton("Turn On All Lamps");
-        allOn.setHorizontalAlignment(JButton.CENTER);
-        allOn.setFont(new Font(FONT, Font.BOLD, 32));
-        allOn.setBackground(new Color(0, 255, 0));
-        allOn.setHoverBackgroundColor(new Color(0, 255, 0));
+        final var allOn = new MyButton("Turn On All Lamps", FONT_AND_SIZE, JButton.CENTER, new Color(0, 255, 0));
         allOn.setPressedBackgroundColor(new Color(0, 150, 0));
-        allOn.setFocusPainted(false);
 
         canvas.setLayout(new GridLayout(1, 2));
         buttons.setLayout(new GridLayout(5, 1));
@@ -106,111 +83,24 @@ public class LampGUI {
         buttons.add(allOff);
         canvas.add(buttons);
 
-        // Utility Classes
-
-        class LampOperations {
-            void switchLamp(final LampModel lamp, final JPanel pan) {
-                lamp.invertState();
-                pan.remove(0);
-                if (lamp.isOn()) {
-                    pan.add(new JLabel(onLamp), 0);
-                } else {
-                    pan.add(new JLabel(offLamp), 0);
-                }
-                pan.revalidate();
-            }
-
-            void turnOn(final LampModel lamp, final JPanel pan) {
-                if (!lamp.isOn()) {
-                    lamp.switchOn();
-                    pan.remove(0);
-                    pan.add(new JLabel(onLamp), 0);
-                    pan.revalidate();
-                }
-            }
-
-            void turnOff(final LampModel lamp, final JPanel pan) {
-                if (lamp.isOn()) {
-                    lamp.switchOff();
-                    pan.remove(0);
-                    pan.add(new JLabel(offLamp), 0);
-                    pan.revalidate();
-                }
-            }
-
-            void removeAtIndex(final List<Integer> indexVector, final List<Pair<LampModel, JPanel>> lampList,
-                    final JPanel lamps, final JComboBox<Integer> indexSelector, final int index) {
-                if (lampCount > 0) {
-                    if (index < MAX_LAMPS) {
-                        indexVector.remove(--lampCount);
-
-                        lampList.remove(index);
-                        lamps.remove(index);
-                        indexSelector.revalidate();
-                        indexSelector.setSelectedIndex(
-                                indexSelector.getSelectedIndex() == lampCount ? -1 : indexSelector.getSelectedIndex());
-                        for (int i = 0; i < lamps.getComponentCount(); i++) {
-                            ((JButton) ((JPanel) lamps.getComponent(i)).getComponent(1)).setText("Switch State" + " [" + (i + 1) + "]");
-                        }
-                        lamps.revalidate();
-                        lamps.repaint();
-                    } else {
-                        JOptionPane.showMessageDialog(f, "Invalid Index!", "Invalid Index Error",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(f, "Can't remove any more lamps!", "Too Few Lamps Error",
-                            JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        }
-
         // Button Operations
 
-        newLamp.addActionListener(e -> {
-            if (lampCount < MAX_LAMPS) {
-                index.add(++lampCount);
+        newLamp.addActionListener(e -> lampCount = LampOperations.addLamp(index, lampCount, MAX_LAMPS, FONT, FONT_SIZE,
+                onLamp, offLamp, lamps, lampList, indexSelector, f));
 
-                final JPanel lampLayout = new JPanel();
-                final var lamp = new LampModel();
-                lampLayout.setLayout(new GridLayout(2, 1));
+        removeLastLamp.addActionListener(e -> lampCount = LampOperations.removeAtIndex(index, lampList, lamps,
+                indexSelector, lamps.getComponentCount() - 1, MAX_LAMPS, lampCount, f));
 
-                final var lampSwitch = new MyButton("Switch State" + " [" + lampCount + "]");
-                lampSwitch.setHorizontalAlignment(JButton.CENTER);
-                lampSwitch.setFont(new Font(FONT, Font.BOLD, FONT_SIZE));
-                lampSwitch.setBackground(new Color(255, 255, 0));
-                lampSwitch.setHoverBackgroundColor(new Color(255, 255, 0));
-                lampSwitch.setPressedBackgroundColor(new Color(200, 200, 0));
-                lampSwitch.setFocusPainted(false);
+        removeSelectedLamp.addActionListener(e -> lampCount = LampOperations.removeAtIndex(index, lampList, lamps,
+                indexSelector, indexSelector.getSelectedIndex() >= 0 ? indexSelector.getSelectedIndex()
+                        : lamps.getComponentCount() - 1,
+                MAX_LAMPS, lampCount, f));
 
-                lampLayout.add(new JLabel(offLamp));
-                lampLayout.add(lampSwitch);
-                lamps.add(lampLayout);
-                final Pair<LampModel, JPanel> pair = new Pair<>(lamp, lampLayout);
-                lampList.add(pair);
-
-                lampSwitch.addActionListener(a -> new LampOperations().switchLamp(lamp, lampLayout));
-
-                indexSelector.revalidate();
-                lamps.revalidate();
-                lamps.repaint();
-            } else {
-                JOptionPane.showMessageDialog(f, "Can't insert any more lamps!", "Too Many Lamps Error",
-                        JOptionPane.ERROR_MESSAGE);
-            }
-        });
-
-        removeLastLamp.addActionListener(e -> new LampOperations().removeAtIndex(index, lampList, lamps, indexSelector,
-                lamps.getComponentCount() - 1));
-
-        removeSelectedLamp.addActionListener(e -> new LampOperations().removeAtIndex(index, lampList, lamps, indexSelector,
-                indexSelector.getSelectedIndex() >= 0 ? indexSelector.getSelectedIndex() : lamps.getComponentCount() - 1));
-
-        allOn.addActionListener(
-                e -> lampList.stream().forEach(pair -> new LampOperations().turnOn(pair.getFirst(), pair.getSecond())));
+        allOn.addActionListener(e -> lampList.stream()
+                .forEach(pair -> LampOperations.turnOn(pair.getFirst(), pair.getSecond(), onLamp)));
 
         allOff.addActionListener(e -> lampList.stream()
-                .forEach(pair -> new LampOperations().turnOff(pair.getFirst(), pair.getSecond())));
+                .forEach(pair -> LampOperations.turnOff(pair.getFirst(), pair.getSecond(), offLamp)));
 
         // Frame Operations
         canvas.add(lamps);
