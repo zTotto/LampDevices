@@ -47,8 +47,7 @@ public final class LampOperations {
 
     static void removeAtIndex(final List<Integer> indexVector, final List<Pair<LampModel, JPanel>> lampList,
             final JPanel lamps, final JComboBox<Integer> indexSelector, final int index) {
-        final int count = LampOperations.getLampCount(lamps);
-        if (count > 0) {
+        if (LampOperations.getLampCount(lamps) > 0) {
             if (index <= LampOperations.getLastLamp(lamps)
                     && ((JComponent) lamps.getComponent(index)).getComponents().length != 0) {
 
@@ -78,8 +77,7 @@ public final class LampOperations {
     static void addLamp(final List<Integer> indexVector, final int maxLamps, final String font, final int fontSize,
             final ImageIcon on, final ImageIcon off, final JPanel lamps, final List<Pair<LampModel, JPanel>> lampList,
             final JComboBox<Integer> indexSelector) {
-        final int count = LampOperations.getLampCount(lamps);
-        if (count < maxLamps) {
+        if (LampOperations.getLampCount(lamps) < maxLamps) {
             for (int i = 0; i < lamps.getComponentCount(); i++) {
                 if (((JComponent) lamps.getComponent(i)).getComponents().length == 0) {
                     indexVector.add(i, i + 1);
@@ -119,7 +117,7 @@ public final class LampOperations {
         int count = 0;
         for (int i = 0; i < lamps.getComponentCount(); i++) {
             if (((JComponent) lamps.getComponent(i)).getComponents().length != 0) {
-                    count++;
+                count++;
             }
         }
         return count;
@@ -130,7 +128,7 @@ public final class LampOperations {
         int index = 0;
         for (int i = 0; i < lamps.getComponentCount(); i++) {
             if (((JComponent) lamps.getComponent(i)).getComponents().length != 0) {
-                    index = i;
+                index = i;
             }
         }
         return index;
@@ -140,8 +138,8 @@ public final class LampOperations {
     private static void rewriteButtons(final JPanel lamps) {
         for (int i = 0; i < lamps.getComponentCount(); i++) {
             if (((JComponent) lamps.getComponent(i)).getComponents().length != 0) {
-                    ((JButton) ((JPanel) lamps.getComponent(i)).getComponent(1))
-                            .setText("Switch State" + " [" + (i + 1) + "]");
+                ((JButton) ((JPanel) lamps.getComponent(i)).getComponent(1))
+                        .setText("Switch State" + " [" + (i + 1) + "]");
             }
 
         }
